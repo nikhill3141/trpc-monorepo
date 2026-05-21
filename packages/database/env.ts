@@ -1,4 +1,19 @@
+import fs from "node:fs";
+import path from "node:path";
+import dotenv from "dotenv";
 import { z } from "zod";
+
+const envCandidates = [
+  path.resolve(process.cwd(), ".env"),
+  path.resolve(process.cwd(), "../../.env"),
+];
+
+for (const envPath of envCandidates) {
+  if (fs.existsSync(envPath)) {
+    dotenv.config({ path: envPath });
+    break;
+  }
+}
 
 const envSchema = z.object({
   DATABASE_URL: z.string().describe("DB URL"),
